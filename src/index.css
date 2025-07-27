@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    background: theme('colors.surface');
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .main-content, #root > div {
+    padding-top: 4.5rem; /* Prevent navbar overlap, adjust as needed */
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    background: theme('colors.glass');
+    backdrop-filter: blur(10px);
+    border: 1px solid theme('colors.primary' / 20%);
+    transition: box-shadow 0.3s, border-color 0.3s;
+  }
+  .glass-effect:hover {
+    background: theme('colors.glassHover');
+    box-shadow: 0 4px 32px 0 theme('colors.accent' / 10%);
+    border-color: theme('colors.accent');
+  }
+  
+  .glass-effect-dark {
+    background: theme('colors.glassDark');
+    backdrop-filter: blur(10px);
+    border: 1px solid theme('colors.secondary' / 30%);
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, theme('colors.primary') 0%, theme('colors.accent') 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .gradient-bg {
+    background: linear-gradient(135deg, theme('colors.primary') 0%, theme('colors.secondary') 100%);
+  }
+}
+
+#root, .main-content {
+  animation: fadeIn 1.2s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
+}
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+.animate-bounce-slow {
+  animation: bounce-slow 3s infinite;
+}
