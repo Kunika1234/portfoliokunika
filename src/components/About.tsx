@@ -21,64 +21,31 @@ const About = () => {
     },
     {
       icon: Users,
-      title: 'Technical Volunteer',
-      description: 'Supporting tech events and sharing knowledge at Linux World'
+      title: 'ML Enthusiast',
+      description: 'Building and deploying machine learning models'
     }
   ];
 
   return (
     <section id="about" className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Animated SVG background shape */}
-      <motion.svg
-        className="absolute -top-32 -left-32 w-[600px] h-[600px] opacity-30 z-0"
-        viewBox="0 0 600 600"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 0.3, scale: 1 }}
-        transition={{ duration: 1.2 }}
-      >
-        <motion.circle
-          cx="300" cy="300" r="250"
-          fill="url(#paint0_radial)"
-          animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}
-        />
-        <defs>
-          <radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientTransform="translate(300 300) rotate(90) scale(250)">
-            <stop stopColor="#70012B" />
-            <stop offset="1" stopColor="#5D0124" stopOpacity="0.7" />
-          </radialGradient>
-        </defs>
-      </motion.svg>
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-8 sm:mb-12 lg:mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
-          <motion.h2
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7 }}
-            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-primary via-accent to-highlight bg-clip-text text-transparent drop-shadow-lg"
-          >
-            About Me
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-lg sm:text-xl text-white max-w-3xl mx-auto px-4 sm:px-0"
-          >
-            Get to know the person behind the code
-          </motion.p>
+          <h2 className="fancy-h1 mb-6">About Me</h2>
+          <p className="text-lg sm:text-xl text-secondary max-w-3xl mx-auto leading-relaxed">
+            I'm a passionate tech enthusiast with a deep interest in DevOps, cloud computing, and system administration. 
+            My journey in technology is driven by curiosity and a desire to build efficient, scalable solutions.
+          </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-          {/* Profile Image with animated border */}
+        {/* Profile Image and Info Section */}
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center mb-12 sm:mb-16">
+          {/* Profile Image */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -87,33 +54,15 @@ const About = () => {
           >
             <div className="relative flex items-center justify-center">
               <motion.div
-                className="w-64 sm:w-72 md:w-80 h-64 sm:h-72 md:h-80 mx-auto rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-br from-primary via-accent to-highlight p-1 shadow-2xl"
-                animate={{ boxShadow: [
-                  '0 0 40px 0 #70012B',
-                  '0 0 60px 10px #5D0124',
-                  '0 0 40px 0 #70012B'
-                ] }}
-                transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
+                className="w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 mx-auto rounded-full overflow-hidden bg-transparent shadow-2xl cursor-pointer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 1.02 }}
               >
                 <img
                   src="/kunika.jpeg"
                   alt="Kunika Prajapat"
-                  className="w-full h-full object-cover rounded-2xl shadow-2xl border-4 border-accent"
+                  className="w-full h-full object-cover rounded-full shadow-xl"
                 />
-              </motion.div>
-              {/* Animated SC badge */}
-              <motion.div
-                className="absolute -top-4 sm:-top-6 -right-4 sm:-right-6 w-16 h-16 sm:w-20 md:w-24 sm:h-20 md:h-24 bg-gradient-to-br from-pink-500 to-yellow-400 rounded-full flex items-center justify-center shadow-xl border-2 sm:border-4 border-white animate-bounce-slow"
-                animate={{ y: [0, -20, 0], scale: [1, 1.2, 1] }}
-                transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
-              >
-                <motion.span
-                  className="text-white font-bold text-lg sm:text-xl md:text-2xl tracking-widest"
-                  animate={{ scale: [1, 1.25, 1] }}
-                  transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-                >
-                  KP
-                </motion.span>
               </motion.div>
             </div>
           </motion.div>
@@ -128,60 +77,76 @@ const About = () => {
           >
             <motion.div
               className="glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-2xl hover:shadow-primary/30 transition-shadow duration-300 backdrop-blur-md bg-white/10 border border-primary/30"
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
               <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                 Hello, I'm Kunika Prajapat!
               </h3>
               <p className="text-white leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
-                I'm an aspiring DevOps Engineer with a strong foundation in Linux, cloud technologies, and automation. 
-                Currently pursuing a Bachelor's degree (B.Tech) in Computer Science & Engineering from RTU, Kota, 
-                I'm continuously refining my skills in the DevOps and Cloud domain.
+                Hello! I'm Kunika Prajapat, currently pursuing MCA (Master of Computer Applications) at Vivekananda Global University.
               </p>
               <p className="text-white leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
-                My journey in tech bridges web development, artificial intelligence, and scalable cloud architecture. 
-                I'm passionate about continuous learning and excited to contribute to real-world projects that challenge and grow my abilities.
+                I completed my BCA (Bachelor's of Computer Science and Application) building a strong foundation in computer science principles. My passion for technology drives me to explore various domains including DevOps, cloud computing, and web development.
               </p>
               <p className="text-white leading-relaxed text-sm sm:text-base">
-                When I'm not coding, you'll find me exploring emerging tech trends, volunteering at Linux World, or sharing knowledge through open-source contributions and technical communities.
+              My current focus is on building scalable, secure, and efficient cloud-native solutions using modern DevOps practices
               </p>
             </motion.div>
           </motion.div>
         </div>
 
-        {/* Traits with staggered animation */}
-        <motion.div
-          className="mt-8 sm:mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.18 } }
-          }}
-        >
-          {traits.map((trait) => (
+        {/* Traits Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          {traits.map((trait, index) => (
             <motion.div
               key={trait.title}
-              className="flex flex-col items-center justify-center glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-primary/30 transition-shadow duration-300 backdrop-blur-md bg-white/10 border border-primary/30"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.08, rotate: [0, 2, -2, 0] }}
-              transition={{ duration: 0.6, type: 'spring' }}
+              transition={{ duration: 0.8, delay: index * 0.1 }}
               viewport={{ once: true }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="glass-effect p-6 sm:p-8 rounded-2xl text-center group"
             >
-              <span className="mb-4">
-                <trait.icon size={32} className="sm:w-9 sm:h-9 md:w-10 md:h-10 text-accent drop-shadow-lg" />
-              </span>
-              <h4 className="text-base sm:text-lg font-bold text-white mb-2 text-center">
+              <div className="mb-4 flex justify-center">
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  className="p-3 sm:p-4 rounded-full bg-gradient-to-br from-primary to-accent text-white"
+                >
+                  <trait.icon size={24} className="sm:w-6 sm:h-6" />
+                </motion.div>
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">
                 {trait.title}
-              </h4>
-              <p className="text-white text-center text-sm sm:text-base">
+              </h3>
+              <p className="text-secondary text-sm sm:text-base leading-relaxed">
                 {trait.description}
               </p>
             </motion.div>
           ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="mt-12 sm:mt-16 text-center"
+        >
+          <div className="glass-effect p-8 sm:p-10 rounded-3xl max-w-4xl mx-auto">
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-6">
+              My Journey
+            </h3>
+            <p className="text-secondary text-base sm:text-lg leading-relaxed mb-6">
+              I started my tech journey with a curiosity about how systems work and how to make them more efficient. 
+              This led me to explore Linux, cloud platforms, and automation tools. Today, I'm focused on DevOps practices, 
+              containerization, and infrastructure as code.
+            </p>
+            <p className="text-secondary text-base sm:text-lg leading-relaxed">
+              I believe in continuous learning and sharing knowledge with the community. Whether it's contributing to open-source 
+              projects or helping others learn new technologies, I'm always excited to be part of the tech ecosystem.
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>

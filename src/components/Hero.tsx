@@ -9,9 +9,8 @@ const Hero = () => {
   
   useEffect(() => {
     const texts = [
-      'Tech Explorer',
-      'DevOps Engineer',
-      'Problem Solver'
+      'Cloud Engineer',
+      'DevOps Engineer'
     ];
 
     const timeout = setTimeout(() => {
@@ -39,30 +38,6 @@ const Hero = () => {
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Animated Background Particles */}
-      <div className="absolute inset-0">
-        {[...Array(50)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-primary/30 rounded-full"
-            animate={{
-              x: [0, Math.random() * 200 - 100],
-              y: [0, Math.random() * 200 - 100],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: Math.random() * 3 + 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -73,7 +48,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 sm:mb-6 px-4 sm:px-0"
+            className="fancy-h1 px-4 sm:px-0"
           >
             I'm{' '}
             <motion.span
@@ -109,8 +84,8 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="text-base sm:text-lg md:text-xl text-secondary mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-4 sm:px-6 lg:px-8"
           >
-            Passionate about leveraging cutting-edge technology to solve real-world problems. 
-            Specializing in AI, web development, and cloud solutions.
+         I'm a passionate DevOps and Cloud Engineer with hands-on knowledge of tools like docker ,kubernetes, linux ,git and github,aws services.
+         I enjoy automating processes , managing cloud infrastructure and continuously learning new technologies to improve system efficiency.           
           </motion.p>
 
           <motion.div
@@ -124,7 +99,7 @@ const Hero = () => {
               download
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(60, 110, 113, 0.4)' }}
+              whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(139, 69, 19, 0.4)' }}
               whileTap={{ scale: 0.95 }}
               className="gradient-bg text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-semibold flex items-center gap-2 shadow-lg text-sm sm:text-base w-full sm:w-auto justify-center"
             >
@@ -152,7 +127,7 @@ const Hero = () => {
             {[
               { icon: Github, href: 'https://github.com/Kunika1234', label: 'GitHub' },
               { icon: Linkedin, href: 'https://www.linkedin.com/in/kunika-prajapat-486a06311?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', label: 'LinkedIn' },
-              { icon: Mail, href: 'mailto:kunika.prajapat@gmail.com', label: 'Email' },
+              { icon: Mail, href: 'mailto:kunikaprajapat1026@gmail.com', label: 'Email' },
             ].map(({ icon: Icon, href, label }) => (
               <motion.a
                 key={label}

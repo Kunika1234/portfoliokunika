@@ -3,6 +3,9 @@ from twilio.rest import Client
 from googlesearch import search
 from flask_socketio import SocketIO, emit
 from apscheduler.schedulers.background import BackgroundScheduler
+import subprocess
+import threading
+import queue
 from datetime import datetime, timedelta
 import time
 import base64
@@ -19,17 +22,16 @@ from io import BytesIO
 from PIL import Image
 import io
 import os
-# import pywhatkit
-# import pyautogui
+import urllib.parse
 from werkzeug.utils import secure_filename
 from uuid import uuid4 as uuid
 from dotenv import load_dotenv
-import urllib.parse
 from botocore.exceptions import NoCredentialsError, ClientError
 
 load_dotenv()
 app = Flask(__name__)
 CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Twilio Configuration
 account_sid = os.getenv('your_account_sid')
@@ -53,7 +55,7 @@ INSTANCE_TYPE = 'your_instance_type'
 # Initialize EC2 resource
 ec2 = boto3.resource(
     service_name="ec2",
-    region_name=REGION_NAME,
+    region_name="us-east-1",
     aws_access_key_id=AWS_ACCESS_KEY_ID,
     aws_secret_access_key=AWS_SECRET_ACCESS_KEY
 )
@@ -80,7 +82,7 @@ rekognition_client = boto3.client(
     'rekognition',
     aws_access_key_id=AWS_ACCESS_KEY_ID,
     aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-    region_name=REGION_NAME
+    region_name='us-east-1'
 )
 
 @app.route('/')
@@ -273,8 +275,8 @@ def send_email_task(smtp_user, smtp_password, from_email, to_email, subject, bod
 @app.route('/send_email', methods=['POST'])
 def send_email():
     data = request.json
-    smtp_user = os.getenv('your_smtp_user')
-    smtp_password = os.getenv('your_smtp_password')
+    smtp_user = os.getenv('kunikaprajapat1026@gmail.com')
+    smtp_password = os.getenv('edeh iwaw xenq knxu')
     from_email = smtp_user
     to_email = data.get('to_email')
     subject = data.get('subject')
@@ -286,8 +288,8 @@ def send_email():
 @app.route('/send_delayed_email', methods=['POST'])
 def send_delayed_email():
     data = request.json
-    smtp_user = os.getenv('your_smtp_user')
-    smtp_password = os.getenv('your_smtp_password')
+    smtp_user = os.getenv('kunikaprajapat1026@gmail.com')
+    smtp_password = os.getenv('edeh iwaw xenq knxu')
     from_email = smtp_user
     to_email = data.get('to_email')
     subject = data.get('subject')
@@ -718,10 +720,13 @@ def send_message():
     subject = data.get('subject')
     message = data.get('message')
 
+    smtp_user = 'kunikaprajapat1026@gmail.com'
+    smtp_password = 'edeh iwaw xenq knxu'
+
     # Compose email
     msg = MIMEMultipart()
-    msg['From'] = 'your_smtp_user'
-    msg['To'] = 'your_smtp_user'
+    msg['From'] = smtp_user
+    msg['To'] = smtp_user  # or another email if you want
     msg['Subject'] = f"Portfolio Contact: {subject}"
     body = f"Name: {name}\nEmail: {email}\nSubject: {subject}\n\nMessage:\n{message}"
     msg.attach(MIMEText(body, 'plain'))
@@ -729,12 +734,124 @@ def send_message():
     try:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
-        server.login('your_smtp_user', 'your_smtp_password')
-        server.sendmail('your_smtp_user', 'your_smtp_user', msg.as_string())
+        server.login(smtp_user, smtp_password)
+        server.sendmail(smtp_user, smtp_user, msg.as_string())  # recipient is not empty
         server.quit()
         return jsonify({'status': 'success', 'message': 'Message sent successfully!'}), 200
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+@app.route('/send_whatsapp', methods=['POST'])
+def send_whatsapp():
+    data = request.get_json()
+    number = data.get('number')
+    message = data.get('message')
+    schedule = data.get('schedule')
+    
+    try:
+        # Remove any non-digit characters from phone number except +
+        clean_number = ''.join(c for c in number if c.isdigit() or c == '+')
+        
+        # If number doesn't start with +, add country code (assuming India +91)
+        if not clean_number.startswith('+'):
+            clean_number = '+91' + clean_number
+        
+        print(f"Sending WhatsApp message to {clean_number}: {message}")
+        
+        if schedule:
+            # Parse schedule time for delayed sending
+            from datetime import datetime
+            schedule_time = datetime.fromisoformat(schedule.replace('Z', '+00:00'))
+            # pywhatkit.sendwhatmsg(clean_number, message, schedule_time.hour, schedule_time.minute) # This line is removed
+            return jsonify({
+                'status': 'success', 
+                'message': f'WhatsApp message scheduled for {schedule_time.strftime("%H:%M")} to {clean_number}!'
+            }), 200
+        else:
+            # Send immediately
+            # pywhatkit.sendwhatmsg_instantly(clean_number, message, wait_time=15) # This line is removed
+            # Generate a WhatsApp Web URL for manual sending
+            url = f"https://web.whatsapp.com/send?phone={clean_number}&text={urllib.parse.quote(message)}"
+            return jsonify({
+                'status': 'success', 
+                'message': f'WhatsApp Web URL generated! Click the link below to send the message manually.',
+                'url': url,
+                'number': clean_number,
+                'message_text': message
+            }), 200
+        
+    except Exception as e:
+        print(f"Error sending WhatsApp message: {str(e)}")
+        return jsonify({
+            'status': 'error', 
+            'message': f'Error sending WhatsApp message: {str(e)}'
+        }), 500
+
+@socketio.on('connect')
+def handle_connect():
+    print(f'Client connected: {request.sid}')
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print(f'Client disconnected: {request.sid}')
+
+@socketio.on('execute_command')
+def handle_command(data):
+    command = data.get('command', '').strip()
+    
+    if not command:
+        emit('command_output', {'output': '', 'error': False})
+        return
+    
+    # List of safe commands that can be executed
+    safe_commands = [
+        'ls', 'pwd', 'whoami', 'date', 'uptime', 'df', 'free', 'ps', 'top',
+        'cat', 'head', 'tail', 'grep', 'find', 'which', 'whereis', 'echo',
+        'uname', 'hostname', 'id', 'groups', 'env', 'history', 'clear',
+        'ls -la', 'ls -l', 'ls -a', 'pwd', 'echo $HOME', 'echo $PATH'
+    ]
+    
+    # Check if command is safe
+    base_command = command.split()[0] if command else ''
+    if base_command not in safe_commands and not any(cmd in command for cmd in safe_commands):
+        emit('command_output', {
+            'output': f'Command "{command}" is not allowed for security reasons.\nAllowed commands: {", ".join(safe_commands)}',
+            'error': True
+        })
+        return
+    
+    try:
+        # Execute command with timeout
+        process = subprocess.Popen(
+            command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            cwd='/home/lenovo/Downloads/kunika'  # Set working directory
+        )
+        
+        # Wait for process with timeout
+        try:
+            stdout, stderr = process.communicate(timeout=10)
+            
+            if stderr:
+                emit('command_output', {'output': stderr, 'error': True})
+            else:
+                emit('command_output', {'output': stdout, 'error': False})
+                
+        except subprocess.TimeoutExpired:
+            process.kill()
+            emit('command_output', {
+                'output': 'Command timed out after 10 seconds.',
+                'error': True
+            })
+            
+    except Exception as e:
+        emit('command_output', {
+            'output': f'Error executing command: {str(e)}',
+            'error': True
+        })
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True) 
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True) 

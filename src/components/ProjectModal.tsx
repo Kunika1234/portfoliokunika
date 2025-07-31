@@ -58,6 +58,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
   const [instaPassword, setInstaPassword] = useState('');
   const [instaDescription, setInstaDescription] = useState('');
   const [instaSong, setInstaSong] = useState('');
+  const [instaImage, setInstaImage] = useState<File | null>(null);
 
   // Add state for WhatsApp Automation Tool form
   const [waNumber, setWaNumber] = useState('');
@@ -346,6 +347,36 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       setMessageType('success');
     } catch (error) {
       setMessage('Error starting hand detection');
+      setMessageType('error');
+    }
+    setLoading(false);
+  };
+
+  const handleWhatsAppSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:5000/send_whatsapp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ number: waNumber, message: waMessage, schedule: waSchedule }),
+      });
+      const result = await response.json();
+      if (result.status === 'success') {
+        if (result.url) {
+          // Show success message with clickable WhatsApp Web URL
+          setMessage(`${result.message} Click here to open WhatsApp Web: ${result.url}`);
+          // Open WhatsApp Web in new tab
+          window.open(result.url, '_blank');
+        } else {
+          setMessage(result.message);
+        }
+      } else {
+        setMessage(result.message);
+      }
+      setMessageType(result.status === 'success' ? 'success' : 'error');
+    } catch (error) {
+      setMessage('Error sending WhatsApp message');
       setMessageType('error');
     }
     setLoading(false);
@@ -995,7 +1026,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
 
       case 'WhatsApp Automation Tool':
         return (
-          <Form>
+          <Form onSubmit={handleWhatsAppSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
@@ -1114,6 +1145,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
     setInstaPassword('');
     setInstaDescription('');
     setInstaSong('');
+    setInstaImage(null);
   }, [show, projectTitle]);
 
   // Reset WhatsApp form state on modal close or project change

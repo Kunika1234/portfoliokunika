@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
+const sectionIds = ['home', 'about', 'skills', 'projects', 'certifications', 'contact'];
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
 
   const navigation = [
     { name: 'Home', href: '#home' },
@@ -18,6 +21,16 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      // Scrollspy logic
+      let found = 'home';
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i]);
+        if (el && window.scrollY + 80 >= el.offsetTop) {
+          found = sectionIds[i];
+          break;
+        }
+      }
+      setActiveSection(found);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -35,15 +48,10 @@ const Navbar = () => {
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'glass-effect-dark border-b border-primary/30 shadow-xl backdrop-blur-md'
-          : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent backdrop-blur-xl bg-white/5`}
       style={{
         boxShadow: isScrolled
-          ? '0 4px 32px 0 rgba(112,1,43,0.12)' : 'none',
-        borderBottom: isScrolled ? '2px solid #DDA15E' : 'none',
+          ? '0 4px 32px 0 rgba(56,182,255,0.10)' : 'none',
       }}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
@@ -53,13 +61,13 @@ const Navbar = () => {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="text-2xl sm:text-3xl font-signature text-white select-none px-2 sm:px-3 py-1 rounded-lg"
+            className="text-2xl sm:text-3xl font-signature text-white select-none px-2 sm:px-3 py-1 rounded-lg drop-shadow-lg"
             style={{
               fontFamily: 'Great Vibes, Satisfy, Dancing Script, cursive',
               fontSize: '2.3rem',
               fontStyle: 'italic',
               letterSpacing: '0.04em',
-              textShadow: '0 2px 8px rgba(56,189,248,0.18)',
+              textShadow: '0 2px 8px #38b6ff, 0 1px 2px #232946',
             }}
           >
             {'<Kunika Prajapat/>'}
@@ -67,17 +75,28 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-6 lg:ml-10 flex items-baseline space-x-3 lg:space-x-4">
-              {navigation.map((item) => (
-                <motion.button
-                  key={item.name}
-                  whileHover={{ scale: 1.12, color: '#38bdf8' }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => scrollToSection(item.href)}
-                  className="text-primary hover:text-accent transition-colors px-2 sm:px-3 py-2 rounded-md text-sm lg:text-base font-semibold"
-                >
-                  {item.name}
-                </motion.button>
-              ))}
+              {navigation.map((item) => {
+                const isActive = activeSection === item.href.replace('#', '');
+                return (
+                  <motion.button
+                    key={item.name}
+                    whileHover={{ scale: 1.15, y: -3, textShadow: '0 0 16px #38b6ff, 0 0 32px #b388ff' }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={() => scrollToSection(item.href)}
+                    className={`relative font-semibold px-2 sm:px-3 py-2 rounded-md text-sm lg:text-base tracking-wide transition-all duration-200 nav-link-unique
+                      ${isActive ? 'text-[#38b6ff] font-extrabold' : 'text-white'}`}
+                    style={isActive ? {
+                      textShadow: '0 0 16px #38b6ff, 0 0 32px #b388ff, 0 2px 8px #fff',
+                      background: 'linear-gradient(90deg,#38b6ff,#b388ff,#ffd803,#232946)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                    } : {}}
+                  >
+                    {item.name}
+                    <span className={`absolute left-1/2 -translate-x-1/2 bottom-1 h-[3px] ${isActive ? 'w-10 bg-gradient-to-r from-[#38b6ff] via-[#b388ff] to-[#ffd803] opacity-100' : 'w-0 opacity-0'} rounded-full transition-all duration-300 nav-underline-unique`} />
+                  </motion.button>
+                );
+              })}
             </div>
           </div>
 
@@ -115,25 +134,31 @@ const Navbar = () => {
                 onClick={e => e.stopPropagation()}
               >
                 <div className="flex flex-col gap-4">
-                  {navigation.map((item) => (
-                    <motion.button
-                      key={item.name}
-                      onClick={() => {
-                        scrollToSection(item.href);
-                        setIsMobileMenuOpen(false);
-                      }}
-                      whileHover={{ scale: 1.08, backgroundColor: '#70012B', color: '#fff' }}
-                      whileTap={{ scale: 0.96 }}
-                      className="w-full text-primary hover:text-accent transition-colors px-4 py-3 rounded-lg text-base sm:text-lg font-semibold text-left transition-colors relative overflow-hidden"
-                    >
-                      <span>{item.name}</span>
-                      <motion.span
-                        layoutId="nav-underline-mobile"
-                        className="absolute left-0 bottom-2 h-[2.5px] w-full bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
-                        whileHover={{ scaleX: 1 }}
-                      />
-                    </motion.button>
-                  ))}
+                  {navigation.map((item) => {
+                    const isActive = activeSection === item.href.replace('#', '');
+                    return (
+                      <motion.button
+                        key={item.name}
+                        onClick={() => {
+                          scrollToSection(item.href);
+                          setIsMobileMenuOpen(false);
+                        }}
+                        whileHover={{ scale: 1.12, backgroundColor: '#38b6ff', color: '#fff', textShadow: '0 0 16px #38b6ff' }}
+                        whileTap={{ scale: 0.96 }}
+                        className={`w-full font-semibold px-4 py-3 rounded-lg text-base sm:text-lg text-left transition-all duration-200 nav-link-unique
+                          ${isActive ? 'text-[#38b6ff] font-extrabold' : 'text-white'}`}
+                        style={isActive ? {
+                          textShadow: '0 0 16px #38b6ff, 0 0 32px #b388ff, 0 2px 8px #fff',
+                          background: 'linear-gradient(90deg,#38b6ff,#b388ff,#ffd803,#232946)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                        } : {}}
+                      >
+                        <span>{item.name}</span>
+                        <span className={`absolute left-1/2 -translate-x-1/2 bottom-2 h-[3px] ${isActive ? 'w-10 bg-gradient-to-r from-[#38b6ff] via-[#b388ff] to-[#ffd803] opacity-100' : 'w-0 opacity-0'} rounded-full transition-all duration-300 nav-underline-unique`} />
+                      </motion.button>
+                    );
+                  })}
                 </div>
               </motion.div>
             </motion.div>

@@ -52,23 +52,102 @@ const Contact = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Get In Touch
-          </h2>
-          <p className="text-xl text-secondary max-w-3xl mx-auto">
-            Let's discuss your next project or just say hello
-          </p>
+          <h2 className="fancy-h1 mb-6">Get In Touch</h2>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="flex justify-center"
-        >
-          <div className="glass-effect rounded-2xl p-8 w-full max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-white mb-6">Send a Message</h3>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* Contact Information */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="space-y-8"
+          >
+            <div>
+              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-6">
+                Let's Connect
+              </h3>
+              <p className="text-secondary text-lg leading-relaxed mb-8">
+                I'm always interested in new opportunities and collaborations. 
+                Whether you have a question or just want to say hi, feel free to reach out!
+              </p>
+            </div>
+
+            {/* Contact Methods */}
+            <div className="space-y-6">
+              <motion.div
+                whileHover={{ scale: 1.02, x: 5 }}
+                className="flex items-center gap-4 p-4 glass-effect rounded-xl"
+              >
+                <div className="p-3 rounded-full bg-gradient-to-br from-primary to-accent text-white">
+                  <Mail size={20} />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white">Email</h4>
+                  <a 
+                    href="mailto:kunikaprajapat1026@gmail.com" 
+                    className="text-secondary hover:text-primary transition-colors"
+                  >
+                    kunikaprajapat1026@gmail.com
+                  </a>
+                </div>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.02, x: 5 }}
+                className="flex items-center gap-4 p-4 glass-effect rounded-xl"
+              >
+                <div className="p-3 rounded-full bg-gradient-to-br from-primary to-accent text-white">
+                  <Github size={20} />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white">GitHub</h4>
+                  <a 
+                    href="https://github.com/Kunika1234" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-secondary hover:text-primary transition-colors"
+                  >
+                    github.com/Kunika1234
+                  </a>
+                </div>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.02, x: 5 }}
+                className="flex items-center gap-4 p-4 glass-effect rounded-xl"
+              >
+                <div className="p-3 rounded-full bg-gradient-to-br from-primary to-accent text-white">
+                  <Linkedin size={20} />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white">LinkedIn</h4>
+                  <a 
+                    href="https://www.linkedin.com/in/kunika-prajapat-486a06311" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-secondary hover:text-primary transition-colors"
+                  >
+                    linkedin.com/in/kunika-prajapat
+                  </a>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="relative z-10"
+          >
+            <div className="flex items-center gap-3 mb-6 justify-center">
+              <Mail size={28} className="text-primary animate-bounce" />
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-0 tracking-wide">Send a Message</h3>
+            </div>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -129,7 +208,7 @@ const Contact = () => {
                   required
                   rows={5}
                   className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
-                  placeholder="Tell me about your project or just say hello..."
+                  placeholder="Your message here..."
                 />
               </div>
               <motion.button
@@ -137,14 +216,13 @@ const Contact = () => {
                 disabled={isSubmitting}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full gradient-bg text-white px-8 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full gradient-bg text-white py-3 px-6 rounded-lg font-semibold flex items-center justify-center gap-2 hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
-                  />
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    Sending...
+                  </>
                 ) : (
                   <>
                     <Send size={20} />
@@ -152,27 +230,29 @@ const Contact = () => {
                   </>
                 )}
               </motion.button>
+              
               {submitStatus === 'success' && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-green-400 text-center py-2"
+                  className="text-green-400 text-center p-3 rounded-lg bg-green-400/10 border border-green-400/20"
                 >
                   Message sent successfully! I'll get back to you soon.
                 </motion.div>
               )}
+              
               {submitStatus === 'error' && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-red-400 text-center py-2"
+                  className="text-red-400 text-center p-3 rounded-lg bg-red-400/10 border border-red-400/20"
                 >
                   There was an error sending your message. Please try again later.
                 </motion.div>
               )}
             </form>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

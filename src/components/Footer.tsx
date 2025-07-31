@@ -6,9 +6,9 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: Github, href: 'https://github.com/sachinlunayach', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/in/sachinchoudhary1', label: 'LinkedIn' },
-    { icon: Mail, href: 'mailto:sachinlunayach333@gmail.com', label: 'Email' },
+    { icon: Github, href: 'https://github.com/Kunika1234', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/kunika-prajapat-486a06311?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', label: 'LinkedIn' },
+    { icon: Mail, href: 'mailto:kunika.prajapat@gmail.com', label: 'Email' },
   ];
 
   const quickLinks = [
@@ -31,18 +31,27 @@ const Footer = () => {
   };
 
   return (
-    <footer className="glass-effect-dark border-t border-white/10 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <footer className="relative bg-transparent backdrop-blur-2xl border-t-0 py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Animated glowing border */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2 }}
+        className="absolute inset-0 pointer-events-none z-0"
+      >
+        <div className="w-full h-full rounded-t-3xl border-t-4 border-b-0 border-x-0 border-gradient-to-r from-[#38b6ff] via-[#b388ff] to-[#ffd803] animate-pulse opacity-60" style={{ borderTopStyle: 'solid' }} />
+      </motion.div>
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {/* Brand Section */}
           <div className="space-y-4">
             <motion.div
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.08, rotate: -2, textShadow: '0 0 16px #38b6ff' }}
               onClick={scrollToTop}
-              className="cursor-pointer"
+              className="cursor-pointer select-none"
             >
-              <h3 className="text-2xl font-bold text-white">Kunika Prajapat</h3>
-              <p className="text-primary">Tech Explorer & Problem Solver</p>
+              <h3 className="text-2xl font-bold text-white drop-shadow-lg">Kunika Prajapat</h3>
+              <p className="text-primary font-semibold tracking-wide">Tech Explorer & Problem Solver</p>
             </motion.div>
             <p className="text-secondary text-sm leading-relaxed">
               Passionate about leveraging cutting-edge technology to solve real-world problems. 
@@ -58,8 +67,8 @@ const Footer = () => {
                 <motion.button
                   key={link.name}
                   onClick={() => scrollToSection(link.href)}
-                  whileHover={{ x: 5 }}
-                  className="block text-secondary hover:text-primary transition-colors text-sm"
+                  whileHover={{ x: 8, color: '#38b6ff', scale: 1.08 }}
+                  className="block text-secondary hover:text-primary transition-all text-sm font-semibold tracking-wide nav-link-unique"
                 >
                   {link.name}
                 </motion.button>
@@ -77,11 +86,11 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ y: -3, scale: 1.1 }}
-                  className="w-10 h-10 glass-effect rounded-full flex items-center justify-center text-secondary hover:text-white hover:bg-primary/20 transition-all"
+                  whileHover={{ y: -5, scale: 1.18, boxShadow: '0 0 16px #38b6ff, 0 0 32px #b388ff' }}
+                  className="w-11 h-11 glass-effect rounded-full flex items-center justify-center text-secondary hover:text-white hover:bg-primary/30 transition-all border-2 border-white/10 hover:border-[#38b6ff]"
                   aria-label={social.label}
                 >
-                  <social.icon size={18} />
+                  <social.icon size={20} />
                 </motion.a>
               ))}
             </div>
@@ -116,6 +125,18 @@ const Footer = () => {
             </div>
           </div>
         </motion.div>
+        {/* Floating scroll-to-top button */}
+        <motion.button
+          onClick={scrollToTop}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          whileHover={{ scale: 1.18, boxShadow: '0 0 16px #38b6ff' }}
+          transition={{ duration: 0.5 }}
+          className="fixed bottom-8 right-8 z-50 bg-gradient-to-br from-[#38b6ff] via-[#b388ff] to-[#ffd803] text-white p-3 rounded-full shadow-xl border-2 border-white/20 hover:border-[#38b6ff] backdrop-blur-lg"
+          aria-label="Scroll to top"
+        >
+          <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+        </motion.button>
       </div>
     </footer>
   );

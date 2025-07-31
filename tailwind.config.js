@@ -4,17 +4,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#70012B',      // Deep Red
-        secondary: '#5D0124',    // Dark Red
-        accent: '#4B011D',       // Wine
-        highlight: '#380116',    // Plum
-        surface: '#25000E',      // Deep Plum
-        muted: '#130007',        // Near Black
+        primary: '#bd4289',      // Pink/Magenta
+        secondary: '#7051ae',    // Purple
+        accent: '#d15a9e',       // Light Pink
+        highlight: '#8a6bb8',    // Light Purple
+        surface: '#bd4289',      // Pink/Magenta
+        muted: '#a03a7a',        // Darker Pink
+        purple: '#7051ae',       // Purple
+        pink: '#bd4289',         // Pink/Magenta
         black: '#000000',
         white: '#FFFFFF',
-        glass: 'rgba(112, 1, 43, 0.08)', // Subtle glass with primary
-        glassHover: 'rgba(112, 1, 43, 0.15)',
-        glassDark: 'rgba(61, 1, 36, 0.92)',
+        glass: 'rgba(255, 255, 255, 0.1)', // White glass
+        glassHover: 'rgba(255, 255, 255, 0.15)',
+        glassDark: 'rgba(255, 255, 255, 0.05)',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -25,11 +27,17 @@ export default {
       animation: {
         'float': 'float 6s ease-in-out infinite',
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'gradient-shift': 'gradient-shift 8s ease-in-out infinite',
       },
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-20px)' },
+        },
+        'gradient-shift': {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
         }
       }
     },
