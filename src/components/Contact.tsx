@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Send, Github, Linkedin, Twitter } from 'lucide-react';
+import { Mail, Send, Github, Linkedin } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
+import { apiCall, showBackendUnavailableMessage } from '../utils/api';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -23,21 +25,22 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
-    try {
-      const response = await fetch('http://localhost:5000/send_message', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      const result = await response.json();
-      if (result.status === 'success') {
-        setSubmitStatus('success');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-      } else {
-        setSubmitStatus('error');
-      }
-    } catch (error) {
+    
+    const result = await apiCall(API_ENDPOINTS.SEND_MESSAGE, {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    });
+
+    if (result.success && result.data?.status === 'success') {
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } else {
       setSubmitStatus('error');
+      // Show backend unavailable message for demo purposes
+      if (!result.success) {
+        const unavailableResult = showBackendUnavailableMessage();
+        console.log(unavailableResult.message);
+      }
     }
     setIsSubmitting(false);
   };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { Button, Form, Row, Col, Alert, Spinner } from 'react-bootstrap';
+import { API_ENDPOINTS } from '../config/api';
 
 interface ProjectModalProps {
   show: boolean;
@@ -73,7 +74,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/submit', {
+      const response = await fetch(API_ENDPOINTS.SUBMIT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, project: projectTitle }),
@@ -93,7 +94,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/handle_sms', {
+      const response = await fetch(API_ENDPOINTS.HANDLE_SMS, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(smsData),
@@ -113,7 +114,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/send_email', {
+      const response = await fetch(API_ENDPOINTS.SEND_EMAIL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(emailData),
@@ -133,7 +134,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/google_search', {
+      const response = await fetch(API_ENDPOINTS.GOOGLE_SEARCH, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: searchQuery }),
@@ -153,7 +154,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
   const handleCapturePhoto = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/capture_photo', {
+      const response = await fetch(API_ENDPOINTS.CAPTURE_PHOTO, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ip: ipCamera }),
@@ -182,7 +183,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
     try {
       const formData = new FormData();
       formData.append('file', imageFile);
-      const response = await fetch('http://localhost:5000/facecrop', {
+      const response = await fetch(API_ENDPOINTS.FACE_CROP, {
         method: 'POST',
         body: formData,
       });
@@ -191,7 +192,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
         setFaceCropError(result.error);
         setMessageType('error');
       } else if (result.output_images && result.output_images.length > 0) {
-        setCroppedFaceUrls(result.output_images.map(img => `http://localhost:5000/image/${img}`));
+        setCroppedFaceUrls(result.output_images.map(img => API_ENDPOINTS.IMAGE(img)));
         setMessage(result.message);
         setMessageType('success');
       }
@@ -215,7 +216,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       const formData = new FormData();
       formData.append('file', imageFile);
       formData.append('filter_color', filterColor);
-      const response = await fetch('http://localhost:5000/uploadfilter', {
+      const response = await fetch(API_ENDPOINTS.UPLOAD_FILTER, {
         method: 'POST',
         body: formData,
       });
@@ -240,7 +241,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       Object.entries(customImageData).forEach(([key, value]) => {
         formData.append(key, value.toString());
       });
-      const response = await fetch('http://localhost:5000/CustomImg', {
+      const response = await fetch(API_ENDPOINTS.CUSTOM_IMG, {
         method: 'POST',
         body: formData,
       });
@@ -250,7 +251,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
         setMessageType('success');
         setGeneratedImage({
           preview: result.preview,
-          download_url: `http://localhost:5000${result.download_url}`
+          download_url: `${API_ENDPOINTS.SOCKET}${result.download_url}`
         });
       } else {
         setMessage(result.error || 'Error generating custom image');
@@ -272,7 +273,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       Object.entries(awsData).forEach(([key, value]) => {
         formData.append(key, value.toString());
       });
-      const response = await fetch('http://localhost:5000/ec2', {
+      const response = await fetch(API_ENDPOINTS.EC2, {
         method: 'POST',
         body: formData,
       });
@@ -295,7 +296,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       formData.append('aws_secret_access_key', awsData.aws_secret_access_key);
       formData.append('bucket_name', awsData.bucket_name);
       formData.append('region', awsData.region);
-      const response = await fetch('http://localhost:5000/create_s3_bucket', {
+      const response = await fetch(API_ENDPOINTS.CREATE_S3_BUCKET, {
         method: 'POST',
         body: formData,
       });
@@ -321,7 +322,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
     try {
       const formData = new FormData();
       formData.append('imageFile', imageFile);
-      const response = await fetch('http://localhost:5000/analyze-image', {
+      const response = await fetch(API_ENDPOINTS.ANALYZE_IMAGE, {
         method: 'POST',
         body: formData,
       });
@@ -339,7 +340,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
   const handleHandDetection = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/start_detection_finger', {
+      const response = await fetch(API_ENDPOINTS.START_DETECTION_FINGER, {
         method: 'POST',
       });
       const result = await response.json();
@@ -356,7 +357,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/send_whatsapp', {
+      const response = await fetch(API_ENDPOINTS.SEND_WHATSAPP, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ number: waNumber, message: waMessage, schedule: waSchedule }),
@@ -403,7 +404,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
             {ipCamera && (
               <div className="mt-3">
                 <h6>Live Feed:</h6>
-                <img src={`http://localhost:5000/video_feed?url=${encodeURIComponent(ipCamera)}`} alt="Camera Feed" style={{maxWidth: '100%'}} />
+                <img src={API_ENDPOINTS.VIDEO_FEED(ipCamera)} alt="Camera Feed" style={{maxWidth: '100%'}} />
               </div>
             )}
           </Form>
@@ -492,7 +493,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
             e.preventDefault();
             setLoading(true);
             try {
-              const response = await fetch('http://localhost:5000/bluegreen_deploy', {
+              const response = await fetch(API_ENDPOINTS.BLUE_GREEN_DEPLOY, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -553,7 +554,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
             e.preventDefault();
             setLoading(true);
             try {
-              const response = await fetch('http://localhost:5000/jenkins_pipeline', {
+              const response = await fetch(API_ENDPOINTS.JENKINS_PIPELINE, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -601,7 +602,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
             e.preventDefault();
             setLoading(true);
             try {
-              const response = await fetch('http://localhost:5000/food_waste_report', {
+              const response = await fetch(API_ENDPOINTS.FOOD_WASTE_REPORT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

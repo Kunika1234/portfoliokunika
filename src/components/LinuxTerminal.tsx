@@ -5,6 +5,7 @@ import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import { io, Socket } from 'socket.io-client';
 import 'xterm/css/xterm.css';
+import { API_ENDPOINTS } from '../config/api';
 
 interface LinuxTerminalProps {
   isOpen: boolean;
@@ -65,7 +66,7 @@ const LinuxTerminal: React.FC<LinuxTerminalProps> = ({ isOpen, onClose }) => {
 
     // Connect to Socket.IO
     if (!socketRef.current) {
-      socketRef.current = io('http://localhost:5000');
+      socketRef.current = io(API_ENDPOINTS.SOCKET);
       
       socketRef.current.on('connect', () => {
         setIsConnected(true);
@@ -92,7 +93,7 @@ const LinuxTerminal: React.FC<LinuxTerminalProps> = ({ isOpen, onClose }) => {
     // Handle terminal input
     if (terminalInstance.current) {
       let currentCommand = '';
-      let commandHistory: string[] = [];
+      const commandHistory: string[] = [];
       let historyIndex = -1;
 
       terminalInstance.current.onData((data) => {
