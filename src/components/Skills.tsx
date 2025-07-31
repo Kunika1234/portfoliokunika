@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-  SiDocker, SiJenkins, SiGithubactions, SiAmazon, SiGithub, SiLinux, SiKubernetes,
+  SiDocker, SiAmazon, SiGithub, SiLinux, SiKubernetes,
   SiPython, SiJavascript, SiHtml5, SiCss3, SiMysql
 } from 'react-icons/si';
-import { FaGitAlt, FaCloud, FaUsers, FaComments, FaLightbulb, FaRocket, FaFileAlt } from 'react-icons/fa';
+import { FaUsers, FaComments, FaLightbulb, FaRocket, FaFileAlt } from 'react-icons/fa';
 import { BiBrain } from 'react-icons/bi';
 
 const technicalSkills = [

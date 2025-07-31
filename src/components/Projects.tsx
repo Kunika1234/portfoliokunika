@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, Github, Eye } from 'lucide-react';
+import { ExternalLink, Github } from 'lucide-react';
 import ProjectModal from './ProjectModal';
 
-import { Filter, Play } from 'lucide-react';
+
 import { AnimatePresence } from 'framer-motion';
 
 const FILTERS = [
@@ -41,12 +41,12 @@ const Projects = () => {
     'New Year Project'
   ];
 
-  const handleCardClick = (project: any) => {
+  const handleCardClick = (project: typeof projects[0]) => {
     setActiveProjectTitle(project.title);
     setShowModal(true);
   };
 
-  const handleLiveDemoClick = (project, e) => {
+  const handleLiveDemoClick = (project: typeof projects[0], e: React.MouseEvent) => {
     e.stopPropagation();
     // For simple live demo projects, open live URL in new tab
     if (simpleLiveDemoProjects.includes(project.title) && project.liveUrl) {

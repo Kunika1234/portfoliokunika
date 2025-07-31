@@ -12,7 +12,7 @@ interface ProjectModalProps {
   liveUrl?: string;
 }
 
-const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle, showLiveDemo, liveUrl }) => {
+const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -59,7 +59,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
   const [instaPassword, setInstaPassword] = useState('');
   const [instaDescription, setInstaDescription] = useState('');
   const [instaSong, setInstaSong] = useState('');
-  const [instaImage, setInstaImage] = useState<File | null>(null);
 
   // Add state for WhatsApp Automation Tool form
   const [waNumber, setWaNumber] = useState('');
@@ -82,7 +81,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       const result = await response.json();
       setMessage(result.message);
       setMessageType('success');
-    } catch (error) {
+    } catch {
       setMessage('Error submitting form');
       setMessageType('error');
     }
@@ -102,7 +101,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       const result = await response.json();
       setMessage(result.message);
       setMessageType(result.status === 'success' ? 'success' : 'error');
-    } catch (error) {
+    } catch {
       setMessage('Error sending SMS');
       setMessageType('error');
     }
@@ -122,7 +121,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       const result = await response.json();
       setMessage(result.message);
       setMessageType(result.status === 'success' ? 'success' : 'error');
-    } catch (error) {
+    } catch {
       setMessage('Error sending email');
       setMessageType('error');
     }
@@ -143,7 +142,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       setSearchResults(result.results);
       setMessage('Search completed successfully');
       setMessageType('success');
-    } catch (error) {
+    } catch {
       setMessage('Error performing search');
       setMessageType('error');
     }
@@ -162,7 +161,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       const result = await response.json();
       setMessage(result.message);
       setMessageType('success');
-    } catch (error) {
+    } catch {
       setMessage('Error capturing photo');
       setMessageType('error');
     }
@@ -196,7 +195,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
         setMessage(result.message);
         setMessageType('success');
       }
-    } catch (error) {
+    } catch {
       setMessage('Error processing image');
       setMessageType('error');
     }
@@ -225,7 +224,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       setFilteredImageUrl(URL.createObjectURL(blob));
       setMessage('Image filtered successfully');
       setMessageType('success');
-    } catch (error) {
+    } catch {
       setMessage('Error filtering image');
       setMessageType('error');
     }
@@ -257,7 +256,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
         setMessage(result.error || 'Error generating custom image');
         setMessageType('error');
       }
-    } catch (error) {
+    } catch {
       setMessage('Error generating custom image');
       setMessageType('error');
     }
@@ -273,13 +272,13 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       Object.entries(awsData).forEach(([key, value]) => {
         formData.append(key, value.toString());
       });
-      const response = await fetch(API_ENDPOINTS.EC2, {
+      await fetch(API_ENDPOINTS.EC2, {
         method: 'POST',
         body: formData,
       });
       setMessage('EC2 instance created successfully');
       setMessageType('success');
-    } catch (error) {
+    } catch {
       setMessage('Error creating EC2 instance');
       setMessageType('error');
     }
@@ -303,7 +302,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       const result = await response.json();
       setMessage(result.message);
       setMessageType(result.status === 'success' ? 'success' : 'error');
-    } catch (error) {
+    } catch {
       setMessage('Error creating S3 bucket');
       setMessageType('error');
     }
@@ -329,7 +328,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       const result = await response.json();
       setMessage(`Detected objects: ${result.message}`);
       setMessageType('success');
-    } catch (error) {
+    } catch {
       setMessage('Error analyzing image');
       setMessageType('error');
     }
@@ -346,7 +345,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
       const result = await response.json();
       setMessage(result.message);
       setMessageType('success');
-    } catch (error) {
+    } catch {
       setMessage('Error starting hand detection');
       setMessageType('error');
     }
@@ -376,7 +375,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
         setMessage(result.message);
       }
       setMessageType(result.status === 'success' ? 'success' : 'error');
-    } catch (error) {
+    } catch {
       setMessage('Error sending WhatsApp message');
       setMessageType('error');
     }
@@ -505,7 +504,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
               const result = await response.json();
               setMessage(result.message || 'Deployment triggered!');
               setMessageType('success');
-            } catch (error) {
+            } catch {
               setMessage('Error triggering deployment');
               setMessageType('error');
             }
@@ -565,7 +564,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
               const result = await response.json();
               setMessage(result.message || 'Pipeline triggered!');
               setMessageType('success');
-            } catch (error) {
+            } catch {
               setMessage('Error triggering pipeline');
               setMessageType('error');
             }
@@ -614,7 +613,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ show, onHide, projectTitle,
               const result = await response.json();
               setMessage(result.message || 'Report submitted!');
               setMessageType('success');
-            } catch (error) {
+            } catch {
               setMessage('Error submitting report');
               setMessageType('error');
             }
